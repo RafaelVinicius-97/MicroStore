@@ -15,8 +15,8 @@ namespace MicroStore.ProductAPI.Models
         [Required]
         public string Description { get; set; }
 
-        [Range(1,1000)]
         [Required]
-        public decimal Price { get; set; }
+        [DataType("decimal(6,4)")]
+        public double Price { get; set; }
     }
 }

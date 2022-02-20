@@ -1,33 +1,50 @@
-﻿using MicroStore.ProductAPI.Contracts;
+﻿using MicroStore.ProductAPI.Context;
+using MicroStore.ProductAPI.Contracts;
 using MicroStore.ProductAPI.Models;
 
 namespace MicroStore.ProductAPI.Services
 {
     public class ProductService : IProductService
     {
-        public Product Create(Product product)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly BaseContext _context;
 
-        public bool Delete(int id)
+        public ProductService(BaseContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
         public IEnumerable<Product> GetAll()
         {
-            throw new NotImplementedException();
+            IEnumerable<Product> products = _context.Products;
+            return products;
         }
 
         public Product GetById(int id)
         {
-            throw new NotImplementedException();
+            Product product = _context.Products.Where(x => x.Id == id).First();
+            return product;
         }
 
+        public Product Create(Product product)
+        {
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return product;
+        }
         public Product Update(Product product)
         {
-            throw new NotImplementedException();
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            return product;
+        }
+
+        public bool Delete(int id)
+        {
+            Product product = _context.Products.Where(p => p.Id == id).First();
+            if (product == null) return false;
+            _context.Products.Remove(product);
+            _context.SaveChangesAsync();
+            return true;
         }
     }
 }
